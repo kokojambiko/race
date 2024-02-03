@@ -97,7 +97,7 @@ skin_label= pygame.transform.scale(skin_label, (120, 90))
 skin_label_rect = skin_label.get_rect(topleft=(360, 400))
 ekip_label=label1.render('Экипирован', False, (0, 0, 0))
 menu_label=label1.render('Меню', False, (255, 255, 255))
-menu_label_rect = menu_label.get_rect(topleft=(450, 550))
+menu_label_rect = menu_label.get_rect(topleft=(350, 550))
 
 
 
@@ -167,18 +167,6 @@ car_img=main_car
 
 
 while running:
-    if main == True:
-        car_img =  main_car
-    if cool == True:
-        car_img = cool_car_up
-    if mon == True:
-        car_img = mon_car
-    if red == True:
-        car_img = red_car_up
-    if green == True:
-        car_img = green_car_up
-    if blue == True:
-        car_img = blue_car_up
 
     car_rect = car_img.get_rect(topleft=(cr_x, cr_y))
     mon_rect = mon_img.get_rect(topleft=(mon_x, mon_y))
@@ -223,17 +211,16 @@ while running:
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if play_label_rect.collidepoint(event.pos):
 
-                    if lose==False:
-                        gameplay=True
-                        print(gameplay)
-                        cr_y = 440
-                        cr_x=random.choice(cr_rand)
-                        mon_y=-200
-                        cnt =0
-                        mon_y2 = -200
-                        mon_y3 = -200
-                        mon_x=random.choice(cr_rand)
-                        menu=False
+
+                    gameplay=True
+                    cr_y = 440
+                    cr_x=random.choice(cr_rand)
+                    mon_y=-200
+                    cnt =0
+                    mon_y2 = -200
+                    mon_y3 = -200
+                    mon_x=random.choice(cr_rand)
+                    menu=False
 
 
 
@@ -246,6 +233,7 @@ while running:
                     menu=False
         pygame.display.flip()
     if skin:
+
         lose = False
         screen.blit(background1,(0,0))
         screen.blit(cars2[skin_cnt],(385,300))
@@ -274,62 +262,62 @@ while running:
                     skin=False
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if ok_rect.collidepoint(event.pos):
-                    if skin_cnt==5 and mon==False:
-                        for i in car_false:
-                            if i == True:
-                                i = False
-                            mon = True
+                    if skin_cnt==5 and car_false[4] ==False:
+                        for i in range(len(car_false)):
+                            if car_false[i] == True:
+                                car_false[i] = False
+                        car_false[4] = True
                         screen.blit(ekip_label, (350, 450))
-                    if skin_cnt==4 and cool==False:
-                        for i in car_false:
-                            if i == True:
-                                i = False
-                            cool = True
+
+                    elif skin_cnt == 4 and car_false[0]==False:
+                        for i in range(len(car_false)):
+                            if car_false[i] == True:
+                                car_false[i] = False
+                        car_false[0] = True
                         screen.blit(ekip_label, (350, 450))
-                    if skin_cnt==3 and green==False:
-                        for i in car_false:
-                            if i == True:
-                                i = False
-                        green = True
+                    elif skin_cnt==3 and car_false[2]==False:
+                        for i in range(len(car_false)):
+                            if car_false[i] == True:
+                                car_false[i] = False
+                        car_false[2] = True
                         screen.blit(ekip_label, (350, 450))
-                    if skin_cnt==2 and red==False:
-                        for i in car_false:
-                            if i == True:
-                                i = False
-                        red = True
+                    elif skin_cnt==2 and car_false[1]==False:
+                        for i in range(len(car_false)):
+                            if car_false[i] == True:
+                                car_false[i] = False
+                        car_false[1] = True
                         screen.blit(ekip_label, (350, 450))
-                    if skin_cnt==1 and blue==False:
-                        for i in car_false:
-                            if i == True:
-                                i = False
-                        blue = True
+                    elif skin_cnt==1 and car_false[3]==False:
+                        for i in range(len(car_false)):
+                            if car_false[i] == True:
+                                car_false[i] = False
+                        car_false[3] = True
                         screen.blit(ekip_label, (350, 450))
-                    if skin_cnt==0 and main==False:
-                        for i in car_false:
-                            if i == True:
-                                i = False
-                        main = True
+                    elif skin_cnt==0 and car_false[5]==False:
+                        for i in range(len(car_false)):
+                            if car_false[i] == True:
+                                car_false[i] = False
+                        car_false[5] = True
                         screen.blit(ekip_label, (350, 450))
                 pygame.display.flip()
-            # if main==True:
-            #     car_img=main_car
-            # if cool==True:
-            #     car_img=cool_car_up
-            # if mon==True:
-            #     car_img=mon_car
-            # if red == True:
-            #     car_img = red_car_up
-            # if green == True:
-            #     car_img=green_car_up
-            # if blue == True:
-            #     car_img=blue_car_up
+            if car_false[5]==True:
+                car_img=main_car
+            if car_false[0]==True:
+                car_img=cool_car_up
+            if car_false[4]==True:
+                car_img=mon_car
+            if car_false[1] == True:
+                car_img = red_car_up
+            if car_false[2] == True:
+                car_img=green_car_up
+            if car_false[3] == True:
+                car_img=blue_car_up
         pygame.display.flip()
 
 
 
     if gameplay:
-        print(car_img)
-        print(mon)
+
         screen.blit(background, (0, bg_y))
         screen.blit(background, (0, bg_y - 750))
         screen.blit(car_img,(cr_x,cr_y))
