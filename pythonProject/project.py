@@ -100,10 +100,11 @@ menu_label=label1.render('Меню', False, (255, 255, 255))
 menu_label_rect = menu_label.get_rect(topleft=(350, 550))
 
 
-
+game_over= pygame.mixer.Sound("game-overm.mp3")
 waiting_menu= pygame.mixer.Sound("waitin_time.mp3")
 
 cnt=0
+rec_cnt= 0
 skin_cnt=0
 
 
@@ -168,10 +169,8 @@ car_img=main_car
 
 while running:
 
-    car_rect = car_img.get_rect(topleft=(cr_x, cr_y))
-    mon_rect = mon_img.get_rect(topleft=(mon_x, mon_y))
-    mon_rect2 = mon_img2.get_rect(topleft=(mon_x2, mon_y2))
-    mon_rect3= mon_img3.get_rect(topleft=(mon_x3, mon_y3))
+
+
     if menu:
         waiting_menu.play()
         screen.blit(background1,(0,0))
@@ -186,6 +185,8 @@ while running:
         cry2 += spdcr2
         cry3 += spdcr3
         cry4 += spdcr4
+        value1 = label.render("Ваш рекорд: " + str(rec_cnt), True, (0, 0, 0))
+        screen.blit(value1,(20,20))
         if cry1 >750:
             cry1=-50
             car1 = random.choice(cars)
@@ -210,8 +211,6 @@ while running:
             mouse=pygame.mouse.get_pos()
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if play_label_rect.collidepoint(event.pos):
-
-
                     gameplay=True
                     cr_y = 440
                     cr_x=random.choice(cr_rand)
@@ -221,6 +220,8 @@ while running:
                     mon_y3 = -200
                     mon_x=random.choice(cr_rand)
                     menu=False
+                    spd =2
+                    spd2=7
 
 
 
@@ -242,6 +243,24 @@ while running:
         screen.blit(x,(x_rect))
         screen.blit(ok,(ok_rect))
         clock.tick(FPS)
+        if car_false[5] == True and skin_cnt == 0:
+            car_img = main_car
+            screen.blit(ekip_label, (350, 250))
+        if car_false[0] == True and skin_cnt == 4:
+            car_img = cool_car_up
+            screen.blit(ekip_label, (350, 250))
+        if car_false[4] == True and skin_cnt == 5:
+            car_img = mon_car
+            screen.blit(ekip_label, (350, 250))
+        if car_false[1] == True and skin_cnt == 2:
+            car_img = red_car_up
+            screen.blit(ekip_label, (350, 250))
+        if car_false[2] == True and skin_cnt == 3:
+            car_img = green_car_up
+            screen.blit(ekip_label, (350, 250))
+        if car_false[3] == True and skin_cnt == 1:
+            car_img = blue_car_up
+            screen.blit(ekip_label, (350, 250))
         # Ввод процесса (события)
         for event in pygame.event.get():
             # check for closing window
@@ -267,63 +286,51 @@ while running:
                             if car_false[i] == True:
                                 car_false[i] = False
                         car_false[4] = True
-                        screen.blit(ekip_label, (350, 450))
-
                     elif skin_cnt == 4 and car_false[0]==False:
                         for i in range(len(car_false)):
                             if car_false[i] == True:
                                 car_false[i] = False
                         car_false[0] = True
-                        screen.blit(ekip_label, (350, 450))
                     elif skin_cnt==3 and car_false[2]==False:
                         for i in range(len(car_false)):
                             if car_false[i] == True:
                                 car_false[i] = False
                         car_false[2] = True
-                        screen.blit(ekip_label, (350, 450))
                     elif skin_cnt==2 and car_false[1]==False:
                         for i in range(len(car_false)):
                             if car_false[i] == True:
                                 car_false[i] = False
                         car_false[1] = True
-                        screen.blit(ekip_label, (350, 450))
                     elif skin_cnt==1 and car_false[3]==False:
                         for i in range(len(car_false)):
                             if car_false[i] == True:
                                 car_false[i] = False
                         car_false[3] = True
-                        screen.blit(ekip_label, (350, 450))
                     elif skin_cnt==0 and car_false[5]==False:
                         for i in range(len(car_false)):
                             if car_false[i] == True:
                                 car_false[i] = False
                         car_false[5] = True
-                        screen.blit(ekip_label, (350, 450))
                 pygame.display.flip()
-            if car_false[5]==True:
-                car_img=main_car
-            if car_false[0]==True:
-                car_img=cool_car_up
-            if car_false[4]==True:
-                car_img=mon_car
-            if car_false[1] == True:
-                car_img = red_car_up
-            if car_false[2] == True:
-                car_img=green_car_up
-            if car_false[3] == True:
-                car_img=blue_car_up
+
+
         pygame.display.flip()
 
 
 
     if gameplay:
-
+        car_rect = car_img.get_rect(topleft=(cr_x, cr_y))
+        mon_rect = mon_img.get_rect(topleft=(mon_x, mon_y))
+        mon_rect2 = mon_img2.get_rect(topleft=(mon_x2, mon_y2))
+        mon_rect3 = mon_img3.get_rect(topleft=(mon_x3, mon_y3))
         screen.blit(background, (0, bg_y))
         screen.blit(background, (0, bg_y - 750))
         screen.blit(car_img,(cr_x,cr_y))
         screen.blit(mon_img, (mon_x, mon_y))
         bg_y += spd
         mon_y += spd2
+        if cnt > rec_cnt:
+            rec_cnt= cnt
         if cnt > 0:
             mon_y2 += spd2
             screen.blit(mon_img2 ,(mon_x2, mon_y2))
@@ -361,7 +368,7 @@ while running:
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] and cr_x > 130:
             cr_x -= cr_speed
-        if keys[pygame.K_RIGHT] and cr_x < 650:
+        if keys[pygame.K_RIGHT] and cr_x < 630:
             cr_x += cr_speed
         if keys[pygame.K_UP] and cr_y > 0:
             cr_y -= cr_speed
@@ -376,16 +383,22 @@ while running:
             if event.type == pygame.QUIT:
                 running = False
 
+
         value = label.render("Ваш счёт: " + str(cnt), True, (0, 0, 0))
         screen.blit(value,(20,20))
+        value1 = label.render("Ваш рекорд: " + str(rec_cnt), True, (0, 0, 0))
+        screen.blit(value1,(20,70))
         if car_rect.colliderect(mon_rect) or car_rect.colliderect(mon_rect2) or car_rect.colliderect(mon_rect3):
+            game_over.play()
+
             cr_y = 440
             mon_y= -100
             mon_y2= -100
             mon_y3 = -100
             gameplay=False
-            lose=True
 
+            time.sleep(1)
+            lose=True
         pygame.display.flip()
 
 
