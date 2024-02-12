@@ -172,7 +172,7 @@ while running:
 
 
     if menu:
-        waiting_menu.play()
+        # waiting_menu.play()
         screen.blit(background1,(0,0))
         screen.blit(car1,(crx1,cry1))
         screen.blit(car2, (crx2,cry2))
@@ -389,15 +389,15 @@ while running:
         value1 = label.render("Ваш рекорд: " + str(rec_cnt), True, (0, 0, 0))
         screen.blit(value1,(20,70))
         if car_rect.colliderect(mon_rect) or car_rect.colliderect(mon_rect2) or car_rect.colliderect(mon_rect3):
-            game_over.play()
+
 
             cr_y = 440
             mon_y= -100
             mon_y2= -100
             mon_y3 = -100
             gameplay=False
-
-            time.sleep(1)
+            # game_over.play()
+            # time.sleep(1)
             lose=True
         pygame.display.flip()
 
