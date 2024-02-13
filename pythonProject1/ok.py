@@ -85,33 +85,221 @@ def check_marriage(message):
         # Формируем сообщение с переносом строк для каждой уникальной пары
         response_message = "В этой группе поженились:\n" + "\n".join([f"@{user} и @{spouse}" for user, spouse in married_users])
         bot.send_message(chat_id, response_message)
+
+
 import re
 
-@bot.message_handler(func=lambda message: re.search(r'\bУдарить\b', message.text, re.IGNORECASE) is not None)
-def hit_action(message):
-    chat_id = message.chat.id
-    # Проверяем, есть ли ответ на сообщение
-    if message.reply_to_message is not None:
-        target_user_id = message.reply_to_message.from_user.id
-        bot.send_message(chat_id, f"Вы ударили пользователя @{message.reply_to_message.from_user.username}! Ouch🤜😵‍💫!")
-    else:
-        bot.send_message(chat_id, "Для выполнения действия 'ударить' ответьте на сообщение пользователя.")
 
-
-@bot.message_handler(func=lambda message: re.search(r'\bОбнять\b', message.text, re.IGNORECASE) is not None)
-def hug_action(message):
+# Обработчик для упоминания пользователя через тег
+@bot.message_handler(
+    func=lambda message: re.match(r'^ударить\s+@[A-Za-z0-9_]+$', message.text, re.IGNORECASE) is not None)
+def hit_by_mention(message):
     chat_id = message.chat.id
-    # Получаем информацию о том, кто отправил сообщение
     sender_user = message.from_user
     sender_username = f"@{sender_user.username}" if sender_user.username else sender_user.first_name
 
-    # Проверяем, есть ли ответ на сообщение
+    target_username = re.search(r'@[A-Za-z0-9_]+', message.text).group()  # Получаем имя пользователя из сообщения
+    bot.send_message(chat_id, f"{sender_username} ударил пользователя {target_username}! 👊")
+
+
+# Обработчик для ответа на сообщение
+@bot.message_handler(func=lambda message: message.text.lower() == 'ударить')
+def hit_by_reply(message):
+    chat_id = message.chat.id
+    sender_user = message.from_user
+    sender_username = f"@{sender_user.username}" if sender_user.username else sender_user.first_name
+
     if message.reply_to_message is not None:
         target_user = message.reply_to_message.from_user
         target_username = f"@{target_user.username}" if target_user.username else target_user.first_name
-        bot.send_message(chat_id, f"{sender_username} обнял пользователя {target_username}! 🤗❤️")
+        bot.send_message(chat_id, f"{sender_username} ударил пользователя {target_username}! 👊")
+    else:
+        bot.send_message(chat_id, "Для выполнения действия 'ударить' ответьте на сообщение пользователя.")
+
+# Обработчик для упоминания пользователя через тег
+@bot.message_handler(
+    func=lambda message: re.match(r'^обнять\s+@[A-Za-z0-9_]+$', message.text, re.IGNORECASE) is not None)
+def hug_by_mention(message):
+    chat_id = message.chat.id
+    sender_user = message.from_user
+    sender_username = f"@{sender_user.username}" if sender_user.username else sender_user.first_name
+
+    target_username = re.search(r'@[A-Za-z0-9_]+', message.text).group()  # Получаем имя пользователя из сообщения
+    bot.send_message(chat_id, f"{sender_username} обнял пользователя {target_username}! ❤️")
+
+
+# Обработчик для ответа на сообщение
+@bot.message_handler(func=lambda message: message.text.lower() == 'обнять')
+def hug_by_reply(message):
+    chat_id = message.chat.id
+    sender_user = message.from_user
+    sender_username = f"@{sender_user.username}" if sender_user.username else sender_user.first_name
+
+    if message.reply_to_message is not None:
+        target_user = message.reply_to_message.from_user
+        target_username = f"@{target_user.username}" if target_user.username else target_user.first_name
+        bot.send_message(chat_id, f"{sender_username} обнял пользователя {target_username}! ❤️")
     else:
         bot.send_message(chat_id, "Для выполнения действия 'обнять' ответьте на сообщение пользователя.")
+
+
+# Обработчик для упоминания пользователя через тег
+@bot.message_handler(
+    func=lambda message: re.match(r'^накормить\s+@[A-Za-z0-9_]+$', message.text, re.IGNORECASE) is not None)
+def feed_by_mention(message):
+    chat_id = message.chat.id
+    sender_user = message.from_user
+    sender_username = f"@{sender_user.username}" if sender_user.username else sender_user.first_name
+
+    target_username = re.search(r'@[A-Za-z0-9_]+', message.text).group()  # Получаем имя пользователя из сообщения
+    bot.send_message(chat_id, f"{sender_username} накормил пользователя {target_username} пирожками! 🥟")
+
+
+# Обработчик для ответа на сообщение
+@bot.message_handler(func=lambda message: message.text.lower() == 'накормить')
+def feed_by_reply(message):
+    chat_id = message.chat.id
+    sender_user = message.from_user
+    sender_username = f"@{sender_user.username}" if sender_user.username else sender_user.first_name
+
+    if message.reply_to_message is not None:
+        target_user = message.reply_to_message.from_user
+        target_username = f"@{target_user.username}" if target_user.username else target_user.first_name
+        bot.send_message(chat_id, f"{sender_username} накормил пользователя {target_username} пирожками! 🥟")
+    else:
+        bot.send_message(chat_id, "Для выполнения действия 'накормить' ответьте на сообщение пользователя.")
+
+
+# Обработчик для упоминания пользователя через тег
+@bot.message_handler(
+    func=lambda message: re.match(r'^поцеловать\s+@[A-Za-z0-9_]+$', message.text, re.IGNORECASE) is not None)
+def kiss_by_mention(message):
+    chat_id = message.chat.id
+    sender_user = message.from_user
+    sender_username = f"@{sender_user.username}" if sender_user.username else sender_user.first_name
+
+    target_username = re.search(r'@[A-Za-z0-9_]+', message.text).group()  # Получаем имя пользователя из сообщения
+    bot.send_message(chat_id, f"{sender_username} поцеловал пользователя {target_username}! 💋")
+
+
+# Обработчик для ответа на сообщение
+@bot.message_handler(func=lambda message: message.text.lower() == 'поцеловать')
+def kiss_by_reply(message):
+    chat_id = message.chat.id
+    sender_user = message.from_user
+    sender_username = f"@{sender_user.username}" if sender_user.username else sender_user.first_name
+
+    if message.reply_to_message is not None:
+        target_user = message.reply_to_message.from_user
+        target_username = f"@{target_user.username}" if target_user.username else target_user.first_name
+        bot.send_message(chat_id, f"{sender_username} поцеловал пользователя {target_username}! 💋")
+    else:
+        bot.send_message(chat_id, "Для выполнения действия 'поцеловать' ответьте на сообщение пользователя.")
+
+# Обработчик для упоминания пользователя через тег
+@bot.message_handler(
+    func=lambda message: re.match(r'^расстрелять\s+@[A-Za-z0-9_]+$', message.text, re.IGNORECASE) is not None)
+def shoot_by_mention(message):
+    chat_id = message.chat.id
+    sender_user = message.from_user
+    sender_username = f"@{sender_user.username}" if sender_user.username else sender_user.first_name
+
+    target_username = re.search(r'@[A-Za-z0-9_]+', message.text).group()  # Получаем имя пользователя из сообщения
+    bot.send_message(chat_id, f"{sender_username} расстрелял пользователя {target_username}! 💥🔫")
+
+
+# Обработчик для ответа на сообщение
+@bot.message_handler(func=lambda message: message.text.lower() == 'расстрелять')
+def shoot_by_reply(message):
+    chat_id = message.chat.id
+    sender_user = message.from_user
+    sender_username = f"@{sender_user.username}" if sender_user.username else sender_user.first_name
+
+    if message.reply_to_message is not None:
+        target_user = message.reply_to_message.from_user
+        target_username = f"@{target_user.username}" if target_user.username else target_user.first_name
+        bot.send_message(chat_id, f"{sender_username} расстрелял пользователя {target_username}! 💥🔫")
+    else:
+        bot.send_message(chat_id, "Для выполнения действия 'расстрелять' ответьте на сообщение пользователя.")
+
+# Обработчик для упоминания пользователя через тег
+@bot.message_handler(
+    func=lambda message: re.match(r'^сжечь\s+@[A-Za-z0-9_]+$', message.text, re.IGNORECASE) is not None)
+def burn_by_mention(message):
+    chat_id = message.chat.id
+    sender_user = message.from_user
+    sender_username = f"@{sender_user.username}" if sender_user.username else sender_user.first_name
+
+    target_username = re.search(r'@[A-Za-z0-9_]+', message.text).group()  # Получаем имя пользователя из сообщения
+    bot.send_message(chat_id, f"{sender_username} сжег пользователя {target_username}! 🔥")
+
+
+# Обработчик для ответа на сообщение
+@bot.message_handler(func=lambda message: message.text.lower() == 'сжечь')
+def burn_by_reply(message):
+    chat_id = message.chat.id
+    sender_user = message.from_user
+    sender_username = f"@{sender_user.username}" if sender_user.username else sender_user.first_name
+
+    if message.reply_to_message is not None:
+        target_user = message.reply_to_message.from_user
+        target_username = f"@{target_user.username}" if target_user.username else target_user.first_name
+        bot.send_message(chat_id, f"{sender_username} сжег пользователя {target_username}! 🔥")
+    else:
+        bot.send_message(chat_id, "Для выполнения действия 'сжечь' ответьте на сообщение пользователя.")
+
+# Обработчик для упоминания пользователя через тег
+@bot.message_handler(
+    func=lambda message: re.match(r'^кинуть\s+@[A-Za-z0-9_]+$', message.text, re.IGNORECASE) is not None)
+def burn_by_mention(message):
+    chat_id = message.chat.id
+    sender_user = message.from_user
+    sender_username = f"@{sender_user.username}" if sender_user.username else sender_user.first_name
+
+    target_username = re.search(r'@[A-Za-z0-9_]+', message.text).group()  # Получаем имя пользователя из сообщения
+    bot.send_message(chat_id, f"{sender_username} кинул пользователя {target_username} напрогиб! 🤼😵‍💫")
+
+
+# Обработчик для ответа на сообщение
+@bot.message_handler(func=lambda message: message.text.lower() == 'кинуть')
+def burn_by_reply(message):
+    chat_id = message.chat.id
+    sender_user = message.from_user
+    sender_username = f"@{sender_user.username}" if sender_user.username else sender_user.first_name
+
+    if message.reply_to_message is not None:
+        target_user = message.reply_to_message.from_user
+        target_username = f"@{target_user.username}" if target_user.username else target_user.first_name
+        bot.send_message(chat_id, f"{sender_username} кинул пользователя {target_username} напрогиб! 🤼😵‍💫")
+    else:
+        bot.send_message(chat_id, "Для выполнения действия 'кинуть' ответьте на сообщение пользователя.")
+
+
+# Обработчик для упоминания пользователя через тег
+@bot.message_handler(
+    func=lambda message: re.match(r'^подарить\s+@[A-Za-z0-9_]+\s+айфон$', message.text, re.IGNORECASE) is not None)
+def gift_iphone_by_mention(message):
+    chat_id = message.chat.id
+    sender_user = message.from_user
+    sender_username = f"@{sender_user.username}" if sender_user.username else sender_user.first_name
+
+    target_username = re.search(r'@[A-Za-z0-9_]+', message.text).group()  # Получаем имя пользователя из сообщения
+    bot.send_message(chat_id, f"{sender_username} подарил пользователю {target_username} айфон! 📱")
+
+
+# Обработчик для ответа на сообщение
+@bot.message_handler(func=lambda message: message.text.lower() == 'подарить айфон')
+def gift_iphone_by_reply(message):
+    chat_id = message.chat.id
+    sender_user = message.from_user
+    sender_username = f"@{sender_user.username}" if sender_user.username else sender_user.first_name
+
+    if message.reply_to_message is not None:
+        target_user = message.reply_to_message.from_user
+        target_username = f"@{target_user.username}" if target_user.username else target_user.first_name
+        bot.send_message(chat_id, f"{sender_username} подарил пользователю {target_username} айфон! 📱")
+    else:
+        bot.send_message(chat_id, "Для выполнения действия 'подарить айфон' ответьте на сообщение пользователя.")
 
 
 bot.polling()
